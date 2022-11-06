@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">HW07</string>
+    <string name="submit_label">Submit</string>
+    <string name="cancel_label">Cancel</string>
+    <string name="name_label">Full Name</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="login_label">Login</string>
+    <string name="logout_label">Logout</string>
+    <string name="enter_post_label">Enter Post</string>
+    <string name="create_forum">New Forum</string>
+    <string name="posts_label">Posts</string>
+    <string name="create_account_label">Create New Account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="forums_label">Forums</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Submit">Submit</string>
+    <string name="Forum_Title">Forum Title</string>
+    <string name="Forum_Description">Forum Description</string>
+    <string name="Forum_Title_Hint">Forum Title</string>
+    <string name="Forum_Title_Blank" />
+    <string name="Forum_Description_Blank" />
+    <string name="Forum_Description_Hint">Forum Description</string>
+</resources>
