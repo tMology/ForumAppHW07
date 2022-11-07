@@ -8,10 +8,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 import edu.uncc.hw07.databinding.FragmentCreateForumBinding;
 import edu.uncc.hw07.databinding.FragmentLoginBinding;
@@ -22,6 +31,8 @@ import edu.uncc.hw07.databinding.FragmentLoginBinding;
  * create an instance of this fragment.
  */
 public class CreateForumFragment extends Fragment {
+
+    FirebaseAuth createForumAuth = FirebaseAuth.getInstance();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,14 +97,36 @@ public class CreateForumFragment extends Fragment {
         binding.submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = binding.editTextForumTitle.getText().toString();
-                String password = binding.editTextForumDescription.getText().toString();
-                if(email.isEmpty()){
+                String forumTitle = binding.editTextForumTitle.getText().toString();
+                String forumDescription = binding.editTextForumDescription.getText().toString();
+                if(forumTitle.isEmpty()){
                     Toast.makeText(getActivity(), "Enter valid Forum Title!", Toast.LENGTH_SHORT).show();
-                } else if (password.isEmpty()){
+                } else if (forumDescription.isEmpty()){
                     Toast.makeText(getActivity(), "Enter valid Forum Description!", Toast.LENGTH_SHORT).show();
                 } else {
 
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference docRef = db.collection("forums").document();
+
+                    HashMap<String, Object> postData = new HashMap<>();
+
+                    postData.put("forum_name", forumTitle);
+                    postData.put("created_by_name", createForumAuth.getCurrentUser().getDisplayName());
+                    postData.put("created_by_uid", createForumAuth.getCurrentUser().getUid());
+                    postData.put("forum_description", forumDescription);
+                    postData.put("forum_id", docRef.getId());
+
+                    docRef.set(postData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                mListener.goToForums();
+                            }else{
+                                Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("QWAZ", "Error" + task.getException().getMessage());
+                            }
+                        }
+                    });
                 }
             }
         });

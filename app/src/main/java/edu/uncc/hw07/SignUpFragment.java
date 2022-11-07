@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import edu.uncc.hw07.databinding.FragmentSignUpBinding;
 
@@ -72,6 +73,7 @@ public class SignUpFragment extends Fragment {
                 } else {
                     mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(email, password)
+
                             .addOnFailureListener(getActivity(), new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
@@ -81,21 +83,33 @@ public class SignUpFragment extends Fragment {
                             .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()) {
-                                        mListener.goToForums();
-                                    } else {
-                                        alertBuilder.setTitle("Error")
-                                                .setMessage(task.getException().getMessage())
-                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        Log.d(TAG, "onClick: ");
-                                                    }
-                                                });
-                                        alertBuilder.create().show();
-                                    }
-                                }
 
+                                    if(task.isSuccessful()) {
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(name)
+                                                .build();
+                                        mAuth.getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+
+
+                                                if (task.isSuccessful()) {
+                                                    mListener.goToForums();
+
+                                                } else {
+                                                    alertBuilder.setTitle("Error")
+                                                            .setMessage(task.getException().getMessage())
+                                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                                    Log.d(TAG, "onClick: ");
+                                                                }
+                                                            });
+                                                    alertBuilder.create().show();
+                                                }
+                                            }
+                                    });
+                                }}
                             });
 
                 }
