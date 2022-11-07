@@ -117,8 +117,9 @@ public class ForumsFragment extends Fragment {
 
 
 
-/*
+
                         mForums.add(forum);
+                        /*
                         binding.textViewHours.setText("Hours: " + Integer.toString(hours));
                         if (forum.letter_Forums.contentEquals("A")){
                             gpaQual = 4;
