@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import edu.uncc.hw07.databinding.FragmentCreateForumBinding;
 import edu.uncc.hw07.databinding.FragmentLoginBinding;
@@ -77,7 +79,22 @@ public class CreateForumFragment extends Fragment {
         binding.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mListener.goToForums();
+                mListener.goToForums();
+            }
+        });
+
+        binding.submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = binding.editTextForumTitle.getText().toString();
+                String password = binding.editTextForumDescription.getText().toString();
+                if(email.isEmpty()){
+                    Toast.makeText(getActivity(), "Enter valid Forum Title!", Toast.LENGTH_SHORT).show();
+                } else if (password.isEmpty()){
+                    Toast.makeText(getActivity(), "Enter valid Forum Description!", Toast.LENGTH_SHORT).show();
+                } else {
+
+                }
             }
         });
 
@@ -96,7 +113,7 @@ public class CreateForumFragment extends Fragment {
     }
 
     interface CreateForumListener {
-        //goToForums();
+        void  goToForums();
     }
 
 }

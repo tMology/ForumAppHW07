@@ -16,7 +16,7 @@
         android:text="@string/Submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextForumDescription" />
 
     <Button
         android:id="@+id/cancelButton"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/submitButton" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextForumTitle"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="10dp"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editTextForumDescription"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="10dp"
@@ -59,5 +59,5 @@
         android:text="@string/Forum_Description_Blank"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextForumTitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>
