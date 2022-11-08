@@ -121,13 +121,13 @@ public class CreateForumFragment extends Fragment {
 
                     DocumentReference commCollection = docRef.collection("comments").document();
                     DocumentReference likeCollection = docRef.collection("likes").document();
-                    int z = 0;
+
                     String defaultComment = "default";
                     HashMap<String, Object> likeData = new HashMap<>();
-                    likeData.put("likes", z);
                     likeData.put("liked_by_uid", createForumAuth.getCurrentUser().getUid());
                     likeData.put("liked_by_name", createForumAuth.getCurrentUser().getDisplayName());
                     likeData.put("liked_by_date", new Date().toString());
+                    likeData.put("heart_status", false);
                     likeCollection.set(likeData);
 
                     HashMap<String, Object> commentData = new HashMap<>();
