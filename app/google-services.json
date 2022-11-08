@@ -1,91 +1,33 @@
 {
   "project_info": {
-    "project_number": "401647372498",
-    "project_id": "group15-d8218",
-    "storage_bucket": "group15-d8218.appspot.com"
+    "project_number": "444077760224",
+    "project_id": "hw07-6947a",
+    "storage_bucket": "hw07-6947a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:401647372498:android:0b32c1b17edb40deaec50b",
+        "mobilesdk_app_id": "1:444077760224:android:08108f631a02680726fa85",
         "android_client_info": {
           "package_name": "edu.uncc.hw07"
         }
       },
       "oauth_client": [
         {
-          "client_id": "401647372498-rekmc167run98ulrca7s0uu6ss3dvq4l.apps.googleusercontent.com",
+          "client_id": "444077760224-4811f09821n87epq7cirl0n5ot2i35ga.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAMv2DEaWQL8hQoM4FsAt6vZJrASHcdvTs"
+          "current_key": "AIzaSyB4xAiOEaxupIzmWQQvMM2qB_VGKB2T824"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "401647372498-rekmc167run98ulrca7s0uu6ss3dvq4l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:401647372498:android:ab6294032d490396aec50b",
-        "android_client_info": {
-          "package_name": "edu.uncc.inclass10"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "401647372498-rekmc167run98ulrca7s0uu6ss3dvq4l.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAMv2DEaWQL8hQoM4FsAt6vZJrASHcdvTs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "401647372498-rekmc167run98ulrca7s0uu6ss3dvq4l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:401647372498:android:e26df475b316de5faec50b",
-        "android_client_info": {
-          "package_name": "edu.uncc.inclass11"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "401647372498-rekmc167run98ulrca7s0uu6ss3dvq4l.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAMv2DEaWQL8hQoM4FsAt6vZJrASHcdvTs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "401647372498-rekmc167run98ulrca7s0uu6ss3dvq4l.apps.googleusercontent.com",
+              "client_id": "444077760224-4811f09821n87epq7cirl0n5ot2i35ga.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
