@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -106,7 +107,8 @@ public class CreateForumFragment extends Fragment {
                 } else {
 
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference docRef = db.collection("Forums").document();
+                    CollectionReference docRef = db.collection("Forums").document().collection("comments");
+
 
                     HashMap<String, Object> postData = new HashMap<>();
 
@@ -115,10 +117,24 @@ public class CreateForumFragment extends Fragment {
                     postData.put("created_by_uid", createForumAuth.getCurrentUser().getUid());
                     postData.put("forum_description", forumDescription);
                     postData.put("forum_id", docRef.getId());
-
+/*
                     docRef.set(postData).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                mListener.goToForums();
+                            }else{
+                                Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("QWAZ", "Error" + task.getException().getMessage());
+                            }
+                        }
+                    });
+
+ */
+
+                    docRef.add(postData).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
                             if (task.isSuccessful()){
                                 mListener.goToForums();
                             }else{
