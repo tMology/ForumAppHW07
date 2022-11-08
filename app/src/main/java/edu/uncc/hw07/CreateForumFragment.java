@@ -107,8 +107,7 @@ public class CreateForumFragment extends Fragment {
                 } else {
 
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    CollectionReference docRef = db.collection("Forums").document().collection("comments");
-
+                    DocumentReference docRef = db.collection("Forums").document();
 
                     HashMap<String, Object> postData = new HashMap<>();
 
@@ -117,7 +116,22 @@ public class CreateForumFragment extends Fragment {
                     postData.put("created_by_uid", createForumAuth.getCurrentUser().getUid());
                     postData.put("forum_description", forumDescription);
                     postData.put("forum_id", docRef.getId());
-/*
+
+
+                    DocumentReference commCollection = docRef.collection("comments").document();
+                    DocumentReference likeCollection = docRef.collection("likes").document();
+                    int z = 0;
+                    String defaultComment = "default";
+                    HashMap<String, Object> likeData = new HashMap<>();
+                    likeData.put("likes", z);
+                    likeData.put("liked_by_uid", createForumAuth.getCurrentUser().getUid());
+                    likeData.put("liked_by_name", createForumAuth.getCurrentUser().getDisplayName());
+                    likeData.put("liked_by_date", createForumAuth.getCurrentUser().getDisplayName());
+
+                    HashMap<String, Object> commentData = new HashMap<>();
+                    commentData.put("comments", defaultComment);
+                    commCollection.set(commentData);
+
                     docRef.set(postData).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -130,22 +144,11 @@ public class CreateForumFragment extends Fragment {
                         }
                     });
 
- */
-
-                    docRef.add(postData).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                            if (task.isSuccessful()){
-                                mListener.goToForums();
-                            }else{
-                                Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d("QWAZ", "Error" + task.getException().getMessage());
-                            }
-                        }
-                    });
                 }
             }
         });
+
+
 
 
         getActivity().setTitle(R.string.forums_label);
