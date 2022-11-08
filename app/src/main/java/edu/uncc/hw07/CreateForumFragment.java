@@ -21,6 +21,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import edu.uncc.hw07.databinding.FragmentCreateForumBinding;
@@ -126,10 +127,14 @@ public class CreateForumFragment extends Fragment {
                     likeData.put("likes", z);
                     likeData.put("liked_by_uid", createForumAuth.getCurrentUser().getUid());
                     likeData.put("liked_by_name", createForumAuth.getCurrentUser().getDisplayName());
-                    likeData.put("liked_by_date", createForumAuth.getCurrentUser().getDisplayName());
+                    likeData.put("liked_by_date", new Date().toString());
+                    likeCollection.set(likeData);
 
                     HashMap<String, Object> commentData = new HashMap<>();
-                    commentData.put("comments", defaultComment);
+                    commentData.put("text", defaultComment);
+                    commentData.put("comment_by_uid", createForumAuth.getCurrentUser().getUid());
+                    commentData.put("comment_by_name", createForumAuth.getCurrentUser().getDisplayName());
+                    commentData.put("comment_date", new Date().toString());
                     commCollection.set(commentData);
 
                     docRef.set(postData).addOnCompleteListener(new OnCompleteListener<Void>() {
