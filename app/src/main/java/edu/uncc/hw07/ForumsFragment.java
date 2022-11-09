@@ -19,19 +19,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.Api;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 
 /*
@@ -97,78 +101,14 @@ public class ForumsFragment extends Fragment {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 mForums.clear();
-/*                int hours = 0;
-                double gpa = 0.0, gpaQual = 0.0, finGPA=4.0;
-                */
 
 
                 for (QueryDocumentSnapshot doc : value){
 
                     Forum forum = doc.toObject(Forum.class);
-                    if (pAuth.getCurrentUser().getUid().contentEquals(forum.created_by_uid)){
-
-
-
-
-
-
-
-
-
-
-
-
+                    forum.setupLikeMachine(pAuth.getCurrentUser().getUid());
                         mForums.add(forum);
-                        /*
-                        binding.textViewHours.setText("Hours: " + Integer.toString(hours));
-                        if (forum.letter_Forums.contentEquals("A")){
-                            gpaQual = 4;
-                        }
-                        if (forum.letter_Forums.contentEquals("B")){
-                            gpaQual = 3;
-                        }
-                        if (forum.letter_Forums.contentEquals("C")){
-                            gpaQual = 2;
-                        }
-                        if (forum.letter_Forums.contentEquals("D")){
-                            gpaQual = 1;
-                        }
-                        if (forum.letter_Forums.contentEquals("F")){
-                            gpaQual = 0;
-                        }
-                        gpa += (gpaQual* forum.credit_hours);
 
-                         */
-
-
-
-
-
-
-
-                    }
-
-
-
-
-
-
-
-                    /*
-                    if(hours==0){
-                        binding.textViewGPA.setText("GPA: 4.0");
-                        binding.textViewHours.setText("Hours: " + Integer.toString(hours));
-                    }
-                    else{
-                        finGPA = gpa/hours;
-
-
-
-
-                        binding.textViewGPA.setText("GPA: " + df.format(finGPA));
-                    }
-
- */
                 }
 
                 ForumsAdapter.notifyDataSetChanged();
@@ -216,17 +156,56 @@ public class ForumsFragment extends Fragment {
 
                 mForums = forum;
                 mBinding.textViewForumCreatedBy.setText(forum.created_by_name);
-                mBinding.textViewForumLikesDate.setText(forum.getCreated_by_name());
+
+                if(mForums.createdForumAtTime != null){
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:m a");
+                    mBinding.textViewForumLikesDate.setText(simpleDateFormat.format(forum.getCreatedForumAtTime().toDate()));
+                }
+
                 mBinding.textViewForumText.setText(forum.forum_description);
                 mBinding.textViewForumTitle.setText(forum.getForum_name());
-                mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+
+                if (pAuth.getCurrentUser().getUid().contentEquals(mForums.created_by_uid)){
+                    mBinding.imageViewDelete.setVisibility(View.VISIBLE);
+
+                    mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).delete();
+
+                        }
+                    });
+                }
+                else{
+
+                    mBinding.imageViewDelete.setVisibility(View.INVISIBLE);
+
+                }
+
+                if(mForums.isHaveILiked()){
+                    mBinding.imageViewLike.setImageResource(R.drawable.like_favorite);
+                }
+                else{
+                    mBinding.imageViewLike.setImageResource(R.drawable.like_not_favorite);
+                }
+
+                mBinding.imageViewLike.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View view) {
+                        HashMap<String, Object> likeData = new HashMap<>();
 
-                        FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).delete();
-
+                        if(mForums.isHaveILiked()){
+                            likeData.put("userLikes", FieldValue.arrayRemove(pAuth.getCurrentUser().getUid()));
+                        }
+                        else{
+                            likeData.put("userLikes", FieldValue.arrayUnion(pAuth.getCurrentUser().getUid()));
+                        }
+                        FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).update(likeData);
                     }
                 });
+
+
             }
         }
 

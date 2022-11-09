@@ -10,7 +10,20 @@ public class Forum implements Serializable {
     public String forum_id, created_by_uid, created_by_name, forum_name, forum_description;
     public Timestamp createdForumAtTime;
     public ArrayList<String> userLikes;
+    private boolean haveILiked = false;
 
+    public void setupLikeMachine(String uID){
+        if (userLikes.contains(uID)){
+            haveILiked = true;
+        }
+        else{
+            haveILiked = false;
+        }
+    }
+
+    public boolean isHaveILiked() {
+        return haveILiked;
+    }
 
     public Forum() {
     }

@@ -119,7 +119,7 @@ public class CreateForumFragment extends Fragment {
                     postData.put("created_by_uid", createForumAuth.getCurrentUser().getUid());
                     postData.put("forum_description", forumDescription);
                     postData.put("userLikes", new ArrayList<String>());
-                    postData.put("forumCreatedAt", FieldValue.serverTimestamp());
+                    postData.put("createdForumAtTime", FieldValue.serverTimestamp());
                     postData.put("forum_id", docRef.getId());
 
                     DocumentReference commCollection = docRef.collection("comments").document();
