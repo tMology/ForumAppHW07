@@ -17,9 +17,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import edu.uncc.hw07.databinding.FragmentCreateForumBinding;
@@ -116,6 +118,25 @@ public class CreateForumFragment extends Fragment {
                     postData.put("forum_description", forumDescription);
                     postData.put("forum_id", docRef.getId());
 
+
+                    DocumentReference commCollection = docRef.collection("comments").document();
+                    DocumentReference likeCollection = docRef.collection("likes").document();
+
+                    String defaultComment = "default";
+                    HashMap<String, Object> likeData = new HashMap<>();
+                    likeData.put("liked_by_uid", createForumAuth.getCurrentUser().getUid());
+                    likeData.put("liked_by_name", createForumAuth.getCurrentUser().getDisplayName());
+                    likeData.put("liked_by_date", new Date().toString());
+                    likeData.put("heart_status", false);
+                    likeCollection.set(likeData);
+
+                    HashMap<String, Object> commentData = new HashMap<>();
+                    commentData.put("text", defaultComment);
+                    commentData.put("comment_by_uid", createForumAuth.getCurrentUser().getUid());
+                    commentData.put("comment_by_name", createForumAuth.getCurrentUser().getDisplayName());
+                    commentData.put("comment_date", new Date().toString());
+                    commCollection.set(commentData);
+
                     docRef.set(postData).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -127,9 +148,12 @@ public class CreateForumFragment extends Fragment {
                             }
                         }
                     });
+
                 }
             }
         });
+
+
 
 
         getActivity().setTitle(R.string.forums_label);

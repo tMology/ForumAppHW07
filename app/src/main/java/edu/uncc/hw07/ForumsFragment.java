@@ -6,6 +6,7 @@ import edu.uncc.hw07.databinding.FragmentForumsBinding;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,12 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
 import java.sql.Timestamp;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /*
@@ -48,6 +51,7 @@ public class ForumsFragment extends Fragment {
 
 
     FragmentForumsBinding binding;
+    boolean heartVal = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,15 +101,22 @@ public class ForumsFragment extends Fragment {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 mForums.clear();
-/*                int hours = 0;
-                double gpa = 0.0, gpaQual = 0.0, finGPA=4.0;
-                */
-
 
                 for (QueryDocumentSnapshot doc : value){
 
                     Forum forum = doc.toObject(Forum.class);
-                    if (pAuth.getCurrentUser().getUid().contentEquals(forum.created_by_uid)){
+
+                    mForums.add(forum);
+/*
+                    if (pAuth.getCurrentUser().getUid().contentEquals(db.collection("Forums").document("likes").collection("liked_by_uid").toString())){
+                      if (heartVal == true){
+                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_favorite));
+                }
+                else{
+                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_not_favorite));
+                }
+
+ */
 
 
 
@@ -114,39 +125,6 @@ public class ForumsFragment extends Fragment {
 
 
 
-
-
-
-
-                        mForums.add(forum);
-                        /*
-                        binding.textViewHours.setText("Hours: " + Integer.toString(hours));
-                        if (forum.letter_Forums.contentEquals("A")){
-                            gpaQual = 4;
-                        }
-                        if (forum.letter_Forums.contentEquals("B")){
-                            gpaQual = 3;
-                        }
-                        if (forum.letter_Forums.contentEquals("C")){
-                            gpaQual = 2;
-                        }
-                        if (forum.letter_Forums.contentEquals("D")){
-                            gpaQual = 1;
-                        }
-                        if (forum.letter_Forums.contentEquals("F")){
-                            gpaQual = 0;
-                        }
-                        gpa += (gpaQual* forum.credit_hours);
-
-                         */
-
-
-
-
-
-
-
-                    }
 
 
 
@@ -219,6 +197,23 @@ public class ForumsFragment extends Fragment {
                 mBinding.textViewForumLikesDate.setText(forum.getCreated_by_name());
                 mBinding.textViewForumText.setText(forum.forum_description);
                 mBinding.textViewForumTitle.setText(forum.getForum_name());
+
+
+                if(pAuth.getCurrentUser().getUid().contentEquals(FirebaseFirestore.getInstance().collection("Forums")
+                        .document(mForums.getForum_id()).collection("likes").document().collection("liked_by_user").toString())){
+                    heartVal= true;
+                }
+
+
+                if (heartVal == true){
+                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_favorite));
+                }
+                else{
+                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_not_favorite));
+                }
+
+
+
                 mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
