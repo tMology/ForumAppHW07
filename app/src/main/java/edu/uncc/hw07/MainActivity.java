@@ -62,9 +62,23 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .commit();
     }
 
+    @Override
+    public void goToComments(Forums forums) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, ForumFragment.newInstance(forums))
+                .commit();
+    }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
     }
+
+//    @Override
+//    public void lookAtForum(Forums forumId) {
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.rootView, ForumFragment.newInstance(forumId))
+//                .addToBackStack(null)
+//                .commit();
+//    }
 }

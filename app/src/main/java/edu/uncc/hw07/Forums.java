@@ -2,12 +2,12 @@ package edu.uncc.hw07;
 import java.io.Serializable;
 
 
-public class Forum implements Serializable {
+public class Forums implements Serializable {
 
     public String forum_id, created_by_uid, created_by_name, forum_name, forum_description;
 
 
-    public Forum() {
+    public Forums() {
     }
 
     public String getForum_id() {

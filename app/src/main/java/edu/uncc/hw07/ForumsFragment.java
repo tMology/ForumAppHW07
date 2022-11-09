@@ -6,7 +6,6 @@ import edu.uncc.hw07.databinding.FragmentForumsBinding;
 
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,14 +28,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
 import java.sql.Timestamp;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 /*
@@ -51,7 +50,6 @@ public class ForumsFragment extends Fragment {
 
 
     FragmentForumsBinding binding;
-    boolean heartVal = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,57 +94,16 @@ public class ForumsFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
         db.collection("Forums").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
                 mForums.clear();
-
                 for (QueryDocumentSnapshot doc : value){
-
-                    Forum forum = doc.toObject(Forum.class);
-
-                    mForums.add(forum);
-/*
-                    if (pAuth.getCurrentUser().getUid().contentEquals(db.collection("Forums").document("likes").collection("liked_by_uid").toString())){
-                      if (heartVal == true){
-                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_favorite));
-                }
-                else{
-                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_not_favorite));
-                }
-
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    /*
-                    if(hours==0){
-                        binding.textViewGPA.setText("GPA: 4.0");
-                        binding.textViewHours.setText("Hours: " + Integer.toString(hours));
+                    Forums forum = doc.toObject(Forums.class);
+                    if (pAuth.getCurrentUser().getUid().contentEquals(forum.created_by_uid)){
+                        mForums.add(forum);
                     }
-                    else{
-                        finGPA = gpa/hours;
-
-
-
-
-                        binding.textViewGPA.setText("GPA: " + df.format(finGPA));
-                    }
-
- */
                 }
 
                 ForumsAdapter.notifyDataSetChanged();
@@ -158,7 +115,7 @@ public class ForumsFragment extends Fragment {
     }
 
     ForumsAdapter ForumsAdapter;
-    ArrayList<Forum> mForums = new ArrayList<>();
+    ArrayList<Forums> mForums = new ArrayList<>();
 
 
 
@@ -166,13 +123,13 @@ public class ForumsFragment extends Fragment {
         @NonNull
         @Override
         public ForumsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            ForumRowItemBinding binding = ForumRowItemBinding.inflate(getLayoutInflater(), parent, false);
-            return new ForumsViewHolder(binding);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.forum_row_item, parent, false);
+            return new ForumsViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ForumsViewHolder holder, int position) {
-            Forum forum = mForums.get(position);
+            Forums forum = mForums.get(position);
             holder.setupUI(forum);
         }
 
@@ -183,43 +140,43 @@ public class ForumsFragment extends Fragment {
         }
 
         class ForumsViewHolder extends RecyclerView.ViewHolder {
-            ForumRowItemBinding mBinding;
-            Forum mForums;
-            public ForumsViewHolder(ForumRowItemBinding binding) {
-                super(binding.getRoot());
-                mBinding = binding;
+            Forums mForums;
+            TextView createdBy, forumLikesDate, forumsText, forumTitle;
+            ImageView delete, like;
+
+
+            public ForumsViewHolder(@NonNull View itemView) {
+                super(itemView);
+
+                createdBy = itemView.findViewById(R.id.textViewForumCreatedBy);
+                forumLikesDate = itemView.findViewById(R.id.textViewForumLikesDate);
+                forumsText = itemView.findViewById(R.id.textViewForumText);
+                forumTitle = itemView.findViewById(R.id.textViewForumTitle);
+                delete = itemView.findViewById(R.id.imageViewDelete);
+                like = itemView.findViewById(R.id.imageViewLike);
+
+
             }
 
-            public void setupUI(Forum forum){
+            public void setupUI(Forums forum){
 
-                mForums = forum;
-                mBinding.textViewForumCreatedBy.setText(forum.created_by_name);
-                mBinding.textViewForumLikesDate.setText(forum.getCreated_by_name());
-                mBinding.textViewForumText.setText(forum.forum_description);
-                mBinding.textViewForumTitle.setText(forum.getForum_name());
+                createdBy.setText(forum.created_by_name);
+                forumLikesDate.setText(forum.getCreated_by_name());
+                forumsText.setText(forum.forum_description);
+                forumTitle.setText(forum.getForum_name());
 
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.goToComments(forum);
+                    }
+                });
 
-                if(pAuth.getCurrentUser().getUid().contentEquals(FirebaseFirestore.getInstance().collection("Forums")
-                        .document(mForums.getForum_id()).collection("likes").document().collection("liked_by_user").toString())){
-                    heartVal= true;
-                }
-
-
-                if (heartVal == true){
-                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_favorite));
-                }
-                else{
-                    mBinding.imageViewLike.setImageDrawable(getResources().getDrawable(R.drawable.like_not_favorite));
-                }
-
-
-
-                mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).delete();
-
+                        FirebaseFirestore.getInstance().collection("Forums").document(forum.getForum_id()).delete();
                     }
                 });
             }
@@ -237,6 +194,7 @@ public class ForumsFragment extends Fragment {
     interface ForumsListener{
         void logout();
         void createForum();
+        void goToComments(Forums forums);
     }
 
 }
