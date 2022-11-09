@@ -204,7 +204,12 @@ public class ForumsFragment extends Fragment {
                         FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).update(likeData);
                     }
                 });
-
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.goToForumAndComments(mForums);
+                }
+            });
 
             }
         }
@@ -221,6 +226,7 @@ public class ForumsFragment extends Fragment {
     interface ForumsListener{
         void logout();
         void createForum();
+        void goToForumAndComments(Forum forum);
     }
 
 }

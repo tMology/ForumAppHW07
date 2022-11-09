@@ -59,6 +59,15 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     public void createForum() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new CreateForumFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goToForumAndComments(Forum forum) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, ForumFragment.newInstance(forum))
+                .addToBackStack(null)
                 .commit();
     }
 
