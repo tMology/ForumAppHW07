@@ -122,15 +122,7 @@ public class CreateForumFragment extends Fragment {
                     postData.put("createdForumAtTime", FieldValue.serverTimestamp());
                     postData.put("forum_id", docRef.getId());
 
-                    DocumentReference commCollection = docRef.collection("comments").document();
-                    String defaultComment = "";
 
-                    HashMap<String, Object> commentData = new HashMap<>();
-                    commentData.put("text", defaultComment);
-                    commentData.put("comment_by_uid", createForumAuth.getCurrentUser().getUid());
-                    commentData.put("comment_by_name", createForumAuth.getCurrentUser().getDisplayName());
-                    commentData.put("comment_date", new Date().toString());
-                    commCollection.set(commentData);
 
                     docRef.set(postData).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
