@@ -1,13 +1,34 @@
 package edu.uncc.hw07;
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class Forum implements Serializable {
 
     public String forum_id, created_by_uid, created_by_name, forum_name, forum_description;
+    public Timestamp createdForumAtTime;
+    public ArrayList<String> userLikes;
 
 
     public Forum() {
+    }
+
+    public ArrayList<String> getUserLikes() {
+        return userLikes;
+    }
+
+    public void setUserLikes(ArrayList<String> userLikes) {
+        this.userLikes = userLikes;
+    }
+
+    public Timestamp getCreatedForumAtTime() {
+        return createdForumAtTime;
+    }
+
+    public void setCreatedForumAtTime(Timestamp createdForumAt) {
+        this.createdForumAtTime = createdForumAt;
     }
 
     public String getForum_id() {
@@ -48,18 +69,6 @@ public class Forum implements Serializable {
 
     public void setForum_description(String forum_description) {
         this.forum_description = forum_description;
-    }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "forum_id='" + forum_id + '\'' +
-                ", created_by_uid='" + created_by_uid + '\'' +
-                ", created_by_uid='" + created_by_uid + '\'' +
-                ", created_by_name='" + created_by_name + '\'' +
-                ", forum_name='" + forum_name + '\'' +
-                ", forum_description='" + forum_description + '\'' +
-                '}';
     }
 
 }

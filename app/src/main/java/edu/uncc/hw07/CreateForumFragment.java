@@ -19,8 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -116,19 +118,12 @@ public class CreateForumFragment extends Fragment {
                     postData.put("created_by_name", createForumAuth.getCurrentUser().getDisplayName());
                     postData.put("created_by_uid", createForumAuth.getCurrentUser().getUid());
                     postData.put("forum_description", forumDescription);
+                    postData.put("userLikes", new ArrayList<String>());
+                    postData.put("forumCreatedAt", FieldValue.serverTimestamp());
                     postData.put("forum_id", docRef.getId());
 
-
                     DocumentReference commCollection = docRef.collection("comments").document();
-                    DocumentReference likeCollection = docRef.collection("likes").document();
-                    int z = 0;
-                    String defaultComment = "default";
-                    HashMap<String, Object> likeData = new HashMap<>();
-                    likeData.put("likes", z);
-                    likeData.put("liked_by_uid", createForumAuth.getCurrentUser().getUid());
-                    likeData.put("liked_by_name", createForumAuth.getCurrentUser().getDisplayName());
-                    likeData.put("liked_by_date", new Date().toString());
-                    likeCollection.set(likeData);
+                    String defaultComment = "";
 
                     HashMap<String, Object> commentData = new HashMap<>();
                     commentData.put("text", defaultComment);
