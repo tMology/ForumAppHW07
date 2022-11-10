@@ -41,8 +41,8 @@ import java.util.HashMap;
 
 
 /*
-a. Assignment -- inClass11
-b. File Name -- InClass11
+a. Assignment -- HW7
+b. File Name -- HW7
 c. Aaron Hill & Mitchell Habovick
 */
 

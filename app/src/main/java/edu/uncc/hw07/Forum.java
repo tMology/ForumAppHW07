@@ -7,6 +7,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
+/*
+a. Assignment -- HW7
+b. File Name -- HW7
+c. Aaron Hill & Mitchell Habovick
+*/
+
 public class Forum implements Serializable {
 
     public String forum_id, created_by_uid, created_by_name, forum_name, forum_description;
