@@ -1,4 +1,6 @@
 package edu.uncc.hw07;
+import android.util.Log;
+
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
@@ -13,11 +15,14 @@ public class Forum implements Serializable {
     private boolean haveILiked = false;
 
     public void setupLikeMachine(String uID){
-        if (userLikes.contains(uID)){
-            haveILiked = true;
-        }
-        else{
-            haveILiked = false;
+        try {
+            if (userLikes.contains(uID)) {
+                haveILiked = true;
+            } else {
+                haveILiked = false;
+            }
+        }catch (Exception e){
+            Log.d("error", "setupLikeMachine: Error exception - " + e);
         }
     }
 

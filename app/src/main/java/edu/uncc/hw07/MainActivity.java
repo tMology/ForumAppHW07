@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener, ForumsFragment.ForumsListener, CreateForumFragment.CreateForumListener {
+public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener, ForumsFragment.ForumsListener, CreateForumFragment.CreateForumListener, ForumFragment.ForumListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,5 +75,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+
+    @Override
+    public void doneShowingForum() {
+        getSupportFragmentManager().popBackStack();
     }
 }

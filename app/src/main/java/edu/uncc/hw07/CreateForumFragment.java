@@ -110,7 +110,7 @@ public class CreateForumFragment extends Fragment {
                 } else {
 
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    DocumentReference docRef = db.collection("Forums").document();
+                    DocumentReference docRef = db.collection("forums").document();
 
                     HashMap<String, Object> postData = new HashMap<>();
 

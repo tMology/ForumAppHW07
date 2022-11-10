@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -96,7 +98,7 @@ public class ForumsFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("Forums").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("forums").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
@@ -152,35 +154,50 @@ public class ForumsFragment extends Fragment {
                 mBinding = binding;
             }
 
-            public void setupUI(Forum forum){
+            public void setupUI(Forum forum) {
 
                 mForums = forum;
                 mBinding.textViewForumCreatedBy.setText(forum.created_by_name);
 
-                if(mForums.createdForumAtTime != null){
+                if (mForums.createdForumAtTime != null) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:m a");
-                    mBinding.textViewForumLikesDate.setText(simpleDateFormat.format(forum.getCreatedForumAtTime().toDate()));
+                    mBinding.textViewForumLikesDate.setText(mForums.getUserLikes().size() + " Likes | " +  simpleDateFormat.format(mForums.getCreatedForumAtTime().toDate()));
                 }
 
                 mBinding.textViewForumText.setText(forum.forum_description);
                 mBinding.textViewForumTitle.setText(forum.getForum_name());
 
-                if (pAuth.getCurrentUser().getUid().contentEquals(mForums.created_by_uid)){
+
+                if(pAuth.getCurrentUser().getUid().equals(mForums.getCreated_by_uid())) {
                     mBinding.imageViewDelete.setVisibility(View.VISIBLE);
+
 
                     mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            //delete all the comments from this forum
+                            //then delete the forum.
 
-                            FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).delete();
+                            FirebaseFirestore.getInstance().collection("forums")
+                                    .document(mForums.getForum_id()).collection("comments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful()){
+                                                ArrayList<DocumentReference> commentRefsToDelete = new ArrayList<>();
+                                                for(QueryDocumentSnapshot doc: task.getResult()){
+                                                    commentRefsToDelete.add(doc.getReference());
+                                                }
+                                                deleteCommentFromList(commentRefsToDelete, mForums.getForum_id());
+                                            }
+                                        }
+                                    });
+
+
 
                         }
                     });
-                }
-                else{
-
+                } else {
                     mBinding.imageViewDelete.setVisibility(View.INVISIBLE);
-
                 }
 
                 if(mForums.isHaveILiked()){
@@ -201,7 +218,7 @@ public class ForumsFragment extends Fragment {
                         else{
                             likeData.put("userLikes", FieldValue.arrayUnion(pAuth.getCurrentUser().getUid()));
                         }
-                        FirebaseFirestore.getInstance().collection("Forums").document(mForums.getForum_id()).update(likeData);
+                        FirebaseFirestore.getInstance().collection("forums").document(mForums.getForum_id()).update(likeData);
                     }
                 });
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
@@ -214,6 +231,20 @@ public class ForumsFragment extends Fragment {
             }
         }
 
+
+        }
+    public void deleteCommentFromList(ArrayList<DocumentReference> commentRefsToDelete, String forumId){
+        if(commentRefsToDelete.size() == 0){
+            FirebaseFirestore.getInstance().collection("forums").document(forumId).delete();
+        } else {
+            DocumentReference ref = commentRefsToDelete.remove(0);
+            ref.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    deleteCommentFromList(commentRefsToDelete, forumId);
+                }
+            });
+        }
     }
 
     ForumsListener mListener;
