@@ -6,6 +6,12 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+
+/*
+a. Assignment -- HW7
+b. File Name -- HW7
+c. Aaron Hill & Mitchell Habovick
+*/
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener, ForumsFragment.ForumsListener, CreateForumFragment.CreateForumListener, ForumFragment.ForumListener{
 
     @Override

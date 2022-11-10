@@ -1,6 +1,12 @@
 
 package edu.uncc.hw07;
 
+
+/*
+a. Assignment -- HW7
+b. File Name -- HW7
+c. Aaron Hill & Mitchell Habovick
+*/
 import com.google.firebase.Timestamp;
 
 public class Comment {
